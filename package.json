@@ -1,0 +1,59 @@
+{
+    "name": "rust-test-lens",
+    "displayName": "Rust Test Lens",
+    "description": "Adds a code lens to quickly run or debug a single test for your Rust code.",
+    "version": "0.0.1",
+    "publisher": "hdevalke",
+    "engines": {
+        "vscode": "^1.25.0"
+    },
+    "categories": [
+        "Other", "Programming Languages"
+    ],
+    "activationEvents": [
+        "onCommand:extension.debugTest",
+        "onLanguage:rust"
+    ],
+    "main": "./out/extension",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/hdevalke/rust-test-lens.git"
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.9.2",
+        "vscode": "^1.1.18",
+        "tslint": "^5.10.0",
+        "@types/node": "^10.5.2",
+        "@types/mocha": "^5.2.4"
+    },
+    "extensionDependencies": [
+        "vadimcn.vscode-lldb"
+    ],
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.debugTest",
+                "title": "Debug Rust Test"
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "Rust Test Lens configuration",
+            "properties": {
+                "rust-test-lens.enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable or disable this extension"
+                }
+            }
+        }
+    }
+}
