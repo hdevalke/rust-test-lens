@@ -12,12 +12,17 @@ export class RustTests {
      * @param fn function name
      */
     getPackage(fn: string, uri: string): Package | undefined {
-        let pkg = this.testMap.get(fn);
+        let pkg = this.testMap.get(`${uri}::${fn}`);
         if (!pkg) {
-            for (pkg of this.metadata.packages) {
-                let pkg_dir = dirname(pkg.manifest_path);
-                if (uri.startsWith(pkg_dir)) {
-                    break;
+            if (this.metadata) {
+                for (pkg of this.metadata.packages) {
+                    let pkg_dir = dirname(pkg.manifest_path);
+                    if (uri.startsWith(pkg_dir)) {
+                        break;
+                    }
+                }
+                if (pkg) {
+                    this.testMap.set(`${uri}::${fn}`, pkg);
                 }
             }
         }

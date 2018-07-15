@@ -1,6 +1,8 @@
 # Rust Test Lens
 
-Adds a code lens to rust source files in order to quickly run tests.
+A code lens to debug test in rust source files.
+
+![test lens](images/test_codelens.png)
 
 ## Requirements
 

@@ -17,7 +17,7 @@ export const outputChannel: OutputChannel =
 export function activate(context: ExtensionContext) {
     const config = workspace.getConfiguration("rust-test-lens");
     if (config.get("enabled", true)) {
-        metadata()
+        metadata(err => outputChannel.append(err), true)
             .then(meta => {
                 const rustTests: RustTests = new RustTests(meta);
                 const codeLensProvider = new RustCodeLensProvider(onDidChange,

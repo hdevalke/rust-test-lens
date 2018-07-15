@@ -20,7 +20,8 @@ export interface Metadata {
 
 type StrSink = (data: string) => void;
 
-export async function metadata(onStdErr?: StrSink): Promise<Metadata> {
+export async function metadata(onStdErr?: StrSink,
+        retry = false): Promise<Metadata> {
     let meta = "";
     const cargoArgs = [
         "metadata",
@@ -28,9 +29,19 @@ export async function metadata(onStdErr?: StrSink): Promise<Metadata> {
         "--format-version=1"];
     return runCargo(cargoArgs, data => meta += data, onStdErr)
         .then(_ => JSON.parse(meta))
-        .catch((errInfo) => console.error(`Couldn't get metadata: ${errInfo}`));
+        .catch((reason) => {
+            if (onStdErr) {
+                onStdErr(`Couldn't get metadata: ${reason}. 
+                Cargo command run: cargo ${cargoArgs.join(' ')} 
+                Metadata read so far: ${meta}`);
+            }
+            if (retry) {
+                return metadata(onStdErr);
+            } else {
+                return Promise.reject(reason);
+            }
+        });
 }
-
 
 async function runCargo(args?: ReadonlyArray<string>, onStdOut?: StrSink,
     onStdErr?: StrSink): Promise<number> {
@@ -41,7 +52,11 @@ async function runCargo(args?: ReadonlyArray<string>, onStdOut?: StrSink,
             stdio: ['ignore', 'pipe', 'pipe'],
         };
         const proc = spawn("cargo", args, options);
-        proc.on('error', err => reject(err));
+        proc.on('error',
+            err => {
+                reject(err);
+            }
+        );
 
         proc.stderr.on('data', chunk => {
             if (onStdErr) {

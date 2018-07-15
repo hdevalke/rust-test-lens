@@ -8,8 +8,6 @@ import { basename } from 'path';
 
 export class RustCodeLensProvider implements CodeLensProvider {
 
-    private static readonly TEST_LEN = "#[test]".length;
-
     constructor(private _onDidChange: EventEmitter<void>,
         private rustTests: RustTests) {
     }
@@ -28,14 +26,14 @@ export class RustCodeLensProvider implements CodeLensProvider {
         const reFnTest = /fn\s+(.+)\s*\(\s*\)/g;
         let lenses: CodeLens[] = [];
         while (reTest.exec(text) !== null) {
-            const end = doc.positionAt(reTest.lastIndex);
-            let startIdx = reTest.lastIndex - RustCodeLensProvider.TEST_LEN;
-            const start = doc.positionAt(startIdx);
-            const range = new Range(start, end);
             reFnTest.lastIndex = reTest.lastIndex;
             const match = reFnTest.exec(text);
             const fn = match === null ? null : match[1];
             if (fn) {
+                const startIdx = reFnTest.lastIndex - fn.length - 3;
+                const start = doc.positionAt(startIdx);
+                const end = doc.positionAt(reFnTest.lastIndex);
+                const range = new Range(start, end);
                 const debugConfig = this.createDebugConfig(fn, doc.fileName);
                 if (debugConfig) {
                     lenses.push(new CodeLens(range, {
