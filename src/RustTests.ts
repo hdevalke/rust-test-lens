@@ -5,7 +5,10 @@ import { dirname } from "path";
 export class RustTests {
     private readonly testMap: Map<string, Package> = new Map<string, Package>();
     constructor(private metadata: Metadata) {
-
+        // sort packages by manifest path length to match the longest path.
+        metadata.packages.sort((a, b) => {
+            return b.manifest_path.length - a.manifest_path.length;
+        });
     }
     /**
      * Get the package based on the function name.
