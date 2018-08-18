@@ -4,7 +4,9 @@ All notable changes to the "rust-test-lens" extension will be documented in this
 
 Check [Keep a Changelog](https://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
+## 0.0.3
+
+- Fix issue with workspace containing a root crate [#1](https://github.com/hdevalke/rust-test-lens/issues/1)
 
 ## 0.0.2
 
