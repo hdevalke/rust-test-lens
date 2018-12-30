@@ -1,13 +1,19 @@
 'use strict';
 // Helper function and interfaces to work with cargo metadata.
 import { workspace } from "vscode";
-import { spawn } from "child_process";
+import { spawn, SpawnOptions } from "child_process";
+
+export interface Target {
+    name: string;
+    src_path: string;
+}
 
 export interface Package {
     name: string;
     authors: string[];
     version: string;
     manifest_path: string;
+    targets: Target[];
 }
 
 export interface Metadata {
@@ -21,7 +27,7 @@ export interface Metadata {
 type StrSink = (data: string) => void;
 
 export async function metadata(onStdErr?: StrSink,
-        retry = false): Promise<Metadata> {
+    retry = false): Promise<Metadata> {
     let meta = "";
     const cargoArgs = [
         "metadata",
@@ -47,10 +53,11 @@ async function runCargo(args?: ReadonlyArray<string>, onStdOut?: StrSink,
     onStdErr?: StrSink): Promise<number> {
     return new Promise<number>((resolve, reject) => {
         const workspaceFolders = workspace.workspaceFolders;
-        const options = {
+        const options: SpawnOptions = {
             cwd: workspaceFolders ? workspaceFolders[0].uri.fsPath : undefined,
             stdio: ['ignore', 'pipe', 'pipe'],
         };
+
         const proc = spawn("cargo", args, options);
         proc.on('error',
             err => {

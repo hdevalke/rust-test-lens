@@ -1,6 +1,6 @@
 'use strict';
 import { Metadata, Package } from "./cargo";
-import { dirname } from "path";
+import { basename, dirname } from "path";
 
 export class RustTests {
     private readonly testMap: Map<string, Package> = new Map<string, Package>();
@@ -30,5 +30,23 @@ export class RustTests {
             }
         }
         return pkg;
+    }
+
+    getBin(uri: string, pkg: Package): String | undefined {
+        const name = basename(uri, '.rs');
+        if (name === "main") {
+            return pkg.name;
+        } else {
+            for (const target of pkg.targets) {
+                if (name === target.name) {
+                    if (uri.indexOf("/bin/") !== -1) {
+                        return name;
+                    } else if ("main" === name) {
+                        return dirname(pkg.manifest_path);
+                    }
+                }
+            }
+        }
+        return undefined;
     }
 }

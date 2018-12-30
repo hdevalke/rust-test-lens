@@ -51,20 +51,25 @@ export class RustCodeLensProvider implements CodeLensProvider {
     createDebugConfig(fn: string, uri: string): DebugConfiguration | undefined {
         const pkg = this.rustTests.getPackage(fn, uri);
         if (pkg) {
-            return {
+            const debugConfig = {
                 type: "lldb",
                 request: "launch",
                 name: `Debug ${fn} in ${basename(uri)}`,
                 cargo: {
-                    "args": [
+                    args: [
                         "test",
                         "--no-run",
                         `--package=${pkg.name}`
                     ]
                 },
-                "args": [fn],
-                "cwd": "${workspaceFolder}"
+                args: [fn],
+                cwd: "${workspaceFolder}"
             };
+            const bin = this.rustTests.getBin(uri, pkg);
+            if (bin !== undefined) {
+                debugConfig.cargo.args.push(`--bin=${bin}`);
+            }
+            return debugConfig;
         }
     }
 }

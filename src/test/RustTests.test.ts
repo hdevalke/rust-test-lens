@@ -13,6 +13,7 @@ suite("RustTests Tests", function () {
             ],
             version: "0.1.2",
             manifest_path: "./root_crate/other_sub_crate/Cargo.toml",
+            targets: []
         }, {
             name: "root_crate",
             authors: [
@@ -20,6 +21,7 @@ suite("RustTests Tests", function () {
             ],
             version: "0.1.2",
             manifest_path: "./root_crate/Cargo.toml",
+            targets: []
         }, {
             name: "sub_crate",
             authors: [
@@ -27,6 +29,7 @@ suite("RustTests Tests", function () {
             ],
             version: "0.1.2",
             manifest_path: "./root_crate/sub_crate/Cargo.toml",
+            targets: []
         }],
         target_directory: "target",
         version: 1,
