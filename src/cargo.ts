@@ -6,6 +6,7 @@ import { spawn, SpawnOptions } from "child_process";
 export interface Target {
     name: string;
     src_path: string;
+    kind: string[];
 }
 
 export interface Package {

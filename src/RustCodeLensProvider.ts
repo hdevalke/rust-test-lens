@@ -4,7 +4,7 @@ import {
     Range, TextDocument, DebugConfiguration
 } from 'vscode';
 import { RustTests } from './RustTests';
-import { basename } from 'path';
+import { basename, dirname } from 'path';
 
 export class RustCodeLensProvider implements CodeLensProvider {
 
@@ -60,15 +60,21 @@ export class RustCodeLensProvider implements CodeLensProvider {
                         "test",
                         "--no-run",
                         `--package=${pkg.name}`
-                    ]
+                    ],
+                    filter: {} as any,
                 },
                 args: [fn],
-                cwd: "${workspaceFolder}"
+                cwd: `${dirname(pkg.manifest_path)}`
             };
             const bin = this.rustTests.getBin(uri, pkg);
             if (bin !== undefined) {
                 debugConfig.cargo.args.push(`--bin=${bin}`);
             }
+            const kind = this.rustTests.getKind(uri, pkg);
+            if (kind !== undefined) {
+                debugConfig.cargo.filter.kind = kind;
+            }
+
             return debugConfig;
         }
     }

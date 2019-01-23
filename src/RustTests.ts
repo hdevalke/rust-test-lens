@@ -49,4 +49,21 @@ export class RustTests {
         }
         return undefined;
     }
+
+    /// Get the kind of the target to select.
+    /// For example
+    getKind(uri: string, pkg: Package) : String {
+        const targets = pkg.targets;
+        // fast path
+        if (targets.length === 1) {
+            return targets[0].kind[0];
+        }
+        // slow path
+        for( const target of pkg.targets) {
+            if (target.src_path === uri) {
+                return target.kind[0];
+            }
+        }
+        return "lib";
+    }
 }

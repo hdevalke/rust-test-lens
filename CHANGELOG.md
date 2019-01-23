@@ -4,6 +4,11 @@ All notable changes to the "rust-test-lens" extension will be documented in this
 
 Check [Keep a Changelog](https://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.0.5
+
+- Solves the problem if there are still multiple binaries found. E.g. integration tests.
+- Sets the current working directory to the package root instead of the workspace root.
+
 ## 0.0.4
 
 - Works now if the package contains multiple binaries.
