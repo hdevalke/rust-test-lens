@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+- '8'
+sudo: false
+os:
+- linux
+before_install:
+- if [ $TRAVIS_OS_NAME == "linux" ]; then export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
+  sh -e /etc/init.d/xvfb start; sleep 3; fi
+install:
+- npm install
+- "./node_modules/.bin/vsce package"
+script:
+- npm test --silent
+deploy:
+  provider: releases
+  api_key:
+    secure: Cubt88tWEdFNNIcY3yfcyOJiKFGkKzuDtZukRSGoubKZ40iHEXL0T5tbuMQ7AL+Gy43JjhymXjmLXnQ1avks99KJ2v30V7b82JaamGlK6jxvC4dD5CmkcT5wfpbVItwVnK4l/LrsAmEvhi8sUfLfS8p22eVTUITQk9zlxxkWw5NOCYbMzsNSGTsbsGf5KWAxKEWBseLztZsNQQq3Xfm5rK+pTd6cG1I3uOFZnGt225ztTQf3rjB4CqSO0mjMTh186jghQatAhYGhId0lMg9hK9TpugDCGbhZqGErs5YRAi4/3Bx+f3rHBUV3QfewGS4IxfqM7AeWhcaaWa5pbKSXFZkBbrWWQMLIhBtuljxuaCD/52HucA72RK02nkUXqXnP+slKbXyeP7xfsJz8yG7FUWg/uhFbXz73uI0nG2dE7uSSjRYnHR4qjYarR16QMTwjgPSjI11aRKYiEPx6zVMV1JA+LR2DhIIl33jJXOKRLPuuWLFpNnB4jS4caQY61Ha+FDCNf5pOrieEAv6DoYVnjfN5Jks8KlDlHXtsBV4q6McY68RpgbCun7sme9+9O7LlQG0vJJ3k6pNQP8ishQBBOmE+3abbRYE17ja1Nhp2NTsOYWUpvajPO2HPfIuOq26PRjQcg3c5vXiKl0hTEiJ95GpW95WL8p0aGtZy1UyufSA=
+  file: rust-test-lens-*.vsix
+  on:
+    repo: hdevalke/rust-test-lens
+    tags: true
