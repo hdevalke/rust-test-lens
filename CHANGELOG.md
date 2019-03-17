@@ -4,6 +4,10 @@ All notable changes to the "rust-test-lens" extension will be documented in this
 
 Check [Keep a Changelog](https://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.1.0
+
+- Adds a Debug codelens to the main function in binaries and examples.
+
 ## 0.0.5
 
 - Solves the problem if there are still multiple binaries found. E.g. integration tests.

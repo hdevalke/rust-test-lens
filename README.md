@@ -1,5 +1,7 @@
 # Rust Test Lens
 
+[![Build Status](https://travis-ci.org/hdevalke/rust-test-lens.svg?branch=master)](https://travis-ci.org/hdevalke/rust-test-lens)
+
 A code lens to debug test in rust source files.
 
 ![test lens](images/test_codelens.png)
