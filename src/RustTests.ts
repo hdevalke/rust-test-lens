@@ -2,6 +2,11 @@
 import { Metadata, Package } from "./cargo";
 import { basename, dirname } from "path";
 
+export interface Filter {
+    kind: undefined | string;
+    name: undefined | string;
+}
+
 export class RustTests {
     private readonly testMap: Map<string, Package> = new Map<string, Package>();
     constructor(private metadata: Metadata) {
@@ -32,38 +37,47 @@ export class RustTests {
         return pkg;
     }
 
-    getBin(uri: string, pkg: Package): String | undefined {
-        const name = basename(uri, '.rs');
-        if (name === "main") {
-            return pkg.name;
-        } else {
-            for (const target of pkg.targets) {
-                if (name === target.name) {
-                    if (uri.indexOf("/bin/") !== -1) {
-                        return name;
-                    } else if ("main" === name) {
-                        return dirname(pkg.manifest_path);
-                    }
-                }
+    getBin(uri: string, pkg: Package): string | undefined {
+        let main = undefined;
+        for (const target of pkg.targets) {
+            const source_name = basename(target.src_path, '.rs');
+            if (source_name === 'main') {
+                main = target.name;
+            }
+            if (uri === target.src_path) {
+                return target.name;
             }
         }
-        return undefined;
+        return main;
     }
 
     /// Get the kind of the target to select.
     /// For example
-    getKind(uri: string, pkg: Package) : String {
+    getFilter(uri: string, pkg: Package, bin: string | undefined): Filter {
         const targets = pkg.targets;
+        let target = undefined;
         // fast path
         if (targets.length === 1) {
-            return targets[0].kind[0];
+            target = targets[0];
         }
         // slow path
-        for( const target of pkg.targets) {
-            if (target.src_path === uri) {
-                return target.kind[0];
+        for (const t of pkg.targets) {
+            if (t.src_path === uri) {
+                target = t;
+                break;
             }
         }
-        return "lib";
+        let kind = undefined;
+        let name = undefined;
+        if (target === undefined) {
+            kind = bin === undefined ? "lib" : "bin";
+        } else {
+            kind = target.kind[0];
+            name = kind === "test" ? target.name : undefined;
+        }
+        return {
+            kind: kind,
+            name: name,
+        };
     }
 }

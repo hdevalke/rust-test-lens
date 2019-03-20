@@ -89,27 +89,28 @@ export class RustCodeLensProvider implements CodeLensProvider {
                     "--no-run",
                     `--package=${pkg.name}`
                 ];
-            const debugConfig = {
+
+            const bin = this.rustTests.getBin(uri, pkg);
+            const filter = this.rustTests.getFilter(uri, pkg, bin);
+
+            if (bin !== undefined && filter.kind === "bin") {
+                args.push(`--bin=${bin}`);
+            }
+            if (filter.kind === "example") {
+                args.push(`--example=${bin}`);
+            }
+
+            return {
                 type: "lldb",
                 request: "launch",
                 name: `Debug ${fn} in ${basename(uri)}`,
                 cargo: {
                     args: args,
-                    filter: {} as any,
+                    filter: filter,
                 },
                 args: [fn],
                 cwd: `${dirname(pkg.manifest_path)}`
             };
-            const bin = this.rustTests.getBin(uri, pkg);
-            if (bin !== undefined) {
-                debugConfig.cargo.args.push(`--bin=${bin}`);
-            }
-            const kind = this.rustTests.getKind(uri, pkg);
-            if (kind !== undefined) {
-                debugConfig.cargo.filter.kind = kind;
-            }
-
-            return debugConfig;
         }
     }
 }
