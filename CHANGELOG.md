@@ -4,6 +4,10 @@ All notable changes to the "rust-test-lens" extension will be documented in this
 
 Check [Keep a Changelog](https://keepachangelog.com/) for recommendations on how to structure this file.
 
+## 0.1.1
+
+- Fixes issue [#3](https://github.com/hdevalke/rust-test-lens/issues/3) where tests in binary crate were not launched.
+
 ## 0.1.0
 
 - Adds a Debug codelens to the main function in binaries and examples.

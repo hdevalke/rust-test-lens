@@ -28,6 +28,8 @@ export function activate(context: ExtensionContext) {
 
         let disposable = commands.registerCommand('extension.debugTest',
             (debugConfig) => {
+                const dbgConfigJson = JSON.stringify(debugConfig, null, 2);
+                outputChannel.appendLine(`Debugging: ${dbgConfigJson}`);
                 debug.startDebugging(undefined, debugConfig)
                     .then((r) => console.log("Result", r));
             });
