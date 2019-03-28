@@ -59,14 +59,21 @@ export class RustTests {
         // fast path
         if (targets.length === 1) {
             target = targets[0];
-        }
-        // slow path
-        for (const t of pkg.targets) {
-            if (t.src_path === uri) {
-                target = t;
-                break;
+        } else {
+            // slow path
+            // sort in order to find longest path.
+            targets.sort((a, b) => {
+                return b.src_path.length - a.src_path.length;
+            });
+            for (const t of pkg.targets) {
+                let target_dir = dirname(t.src_path);
+                if (uri.startsWith(target_dir)) {
+                    target = t;
+                    break;
+                }
             }
         }
+
         let kind = undefined;
         let name = undefined;
         if (target === undefined) {
