@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '8'
+- '10'
 sudo: false
 os:
 - linux
@@ -10,8 +10,7 @@ before_install:
 install:
 - npm install
 - "./node_modules/.bin/vsce package"
-script:
-- npm test --silent
+script: 'true'
 deploy:
   provider: releases
   api_key:

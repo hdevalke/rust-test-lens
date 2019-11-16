@@ -2,10 +2,10 @@
   "name": "rust-test-lens",
   "displayName": "Rust Test Lens",
   "description": "Adds a code lens to quickly run or debug a single test for your Rust code.",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "publisher": "hdevalke",
   "engines": {
-    "vscode": "^1.30.2"
+    "vscode": "^1.32.0"
   },
   "categories": [
     "Other",
@@ -15,7 +15,8 @@
     "Rust",
     "debug",
     "codelens",
-    "lldb"
+    "lldb",
+    "multi-root ready"
   ],
   "activationEvents": [
     "onCommand:extension.debugTest",
@@ -35,12 +36,12 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/mocha": "^5.2.5",
-    "@types/node": "^10.12.18",
-    "tslint": "^5.12.1",
-    "typescript": "^3.2.4",
-    "vsce": "^1.54.0",
-    "vscode": "^1.1.27"
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.17.5",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2",
+    "vsce": "^1.69.0",
+    "vscode": "^1.1.36"
   },
   "extensionDependencies": [
     "vadimcn.vscode-lldb"

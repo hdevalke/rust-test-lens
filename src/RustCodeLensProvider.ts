@@ -65,7 +65,7 @@ export class RustCodeLensProvider implements CodeLensProvider {
         const start = doc.positionAt(startIdx);
         const end = doc.positionAt(index);
         const range = new Range(start, end);
-        const debugConfig = this.createDebugConfig(fn, doc.fileName);
+        const debugConfig = this.createDebugConfig(fn, doc);
         if (debugConfig) {
             return new CodeLens(range, {
                 title: 'Debug',
@@ -76,8 +76,9 @@ export class RustCodeLensProvider implements CodeLensProvider {
         }
     }
 
-    createDebugConfig(fn: string, uri: string): DebugConfiguration | undefined {
-        const pkg = this.rustTests.getPackage(fn, uri);
+    createDebugConfig(fn: string, doc: TextDocument):
+            DebugConfiguration | undefined {
+        const pkg = this.rustTests.getPackage(fn, doc.uri);
         if (pkg) {
             const args = fn === "main"
                 ? [
@@ -90,8 +91,8 @@ export class RustCodeLensProvider implements CodeLensProvider {
                     `--package=${pkg.name}`
                 ];
 
-            const bin = this.rustTests.getBin(uri, pkg);
-            const filter = this.rustTests.getFilter(uri, pkg, bin);
+            const bin = this.rustTests.getBin(doc.fileName, pkg);
+            const filter = this.rustTests.getFilter(doc.fileName, pkg, bin);
 
             if (bin !== undefined && filter.kind === "bin") {
                 args.push(`--bin=${bin}`);
@@ -100,10 +101,12 @@ export class RustCodeLensProvider implements CodeLensProvider {
                 args.push(`--example=${bin}`);
             }
 
+            args.push(`--manifest-path=${pkg.manifest_path}`);
+
             return {
                 type: "lldb",
                 request: "launch",
-                name: `Debug ${fn} in ${basename(uri)}`,
+                name: `Debug ${fn} in ${basename(doc.fileName)}`,
                 cargo: {
                     args: args,
                     filter: filter,
