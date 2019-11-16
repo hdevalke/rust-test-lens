@@ -2,7 +2,9 @@
 
 All notable changes to the "rust-test-lens" extension will be documented in this file.
 
-Check [Keep a Changelog](https://keepachangelog.com/) for recommendations on how to structure this file.
+## 0.2.0
+
+- Support for multi root workspaces ([#7](https://github.com/hdevalke/rust-test-lens/issues/7))
 
 ## 0.1.2
 

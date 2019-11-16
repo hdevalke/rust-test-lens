@@ -1,6 +1,6 @@
 'use strict';
 // Helper function and interfaces to work with cargo metadata.
-import { workspace } from "vscode";
+import { WorkspaceFolder } from "vscode";
 import { spawn, SpawnOptions } from "child_process";
 
 export interface Target {
@@ -27,35 +27,36 @@ export interface Metadata {
 
 type StrSink = (data: string) => void;
 
-export async function metadata(onStdErr?: StrSink,
+export async function metadata(cws?: WorkspaceFolder, onStdErr?: StrSink,
     retry = false): Promise<Metadata> {
     let meta = "";
     const cargoArgs = [
         "metadata",
         "--no-deps",
         "--format-version=1"];
-    return runCargo(cargoArgs, data => meta += data, onStdErr)
+    return runCargo(cws, cargoArgs, data => meta += data, onStdErr)
         .then(_ => JSON.parse(meta))
         .catch((reason) => {
             if (onStdErr) {
-                onStdErr(`Couldn't get metadata: ${reason}. 
-                Cargo command run: cargo ${cargoArgs.join(' ')} 
+                onStdErr(`Couldn't get metadata: ${reason}.
+                Cargo command run: cargo ${cargoArgs.join(' ')}
                 Metadata read so far: ${meta}`);
             }
             if (retry) {
-                return metadata(onStdErr);
+                return metadata(cws, onStdErr);
             } else {
                 return Promise.reject(reason);
             }
         });
 }
 
-async function runCargo(args?: ReadonlyArray<string>, onStdOut?: StrSink,
-    onStdErr?: StrSink): Promise<number> {
+async function runCargo(workspaceFolder?: WorkspaceFolder,
+        args?: ReadonlyArray<string>, onStdOut?: StrSink,
+        onStdErr?: StrSink): Promise<number> {
     return new Promise<number>((resolve, reject) => {
-        const workspaceFolders = workspace.workspaceFolders;
+        const cwd = workspaceFolder ? workspaceFolder.uri.fsPath : undefined;
         const options: SpawnOptions = {
-            cwd: workspaceFolders ? workspaceFolders[0].uri.fsPath : undefined,
+            cwd,
             stdio: ['ignore', 'pipe', 'pipe'],
         };
 
