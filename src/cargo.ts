@@ -51,7 +51,7 @@ export async function metadata(cws?: WorkspaceFolder, onStdErr?: StrSink,
 }
 
 async function runCargo(workspaceFolder?: WorkspaceFolder,
-        args?: ReadonlyArray<string>, onStdOut?: StrSink,
+        args?: readonly string[], onStdOut?: StrSink,
         onStdErr?: StrSink): Promise<number> {
     return new Promise<number>((resolve, reject) => {
         const cwd = workspaceFolder ? workspaceFolder.uri.fsPath : undefined;
@@ -59,21 +59,22 @@ async function runCargo(workspaceFolder?: WorkspaceFolder,
             cwd,
             stdio: ['ignore', 'pipe', 'pipe'],
         };
-
-        const proc = spawn("cargo", args, options);
+        const proc = args
+            ? spawn("cargo", args, options)
+            : spawn("cargo", options);
         proc.on('error',
             err => {
                 reject(err);
             }
         );
 
-        proc.stderr.on('data', chunk => {
+        proc.stderr?.on('data', chunk => {
             if (onStdErr) {
                 onStdErr(chunk.toString());
             }
         });
 
-        proc.stdout.on('data', chunk => {
+        proc.stdout?.on('data', chunk => {
             if (onStdOut) {
                 onStdOut(chunk.toString());
             }

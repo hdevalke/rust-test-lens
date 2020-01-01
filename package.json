@@ -37,10 +37,10 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/node": "^10.17.5",
+    "@types/node": "^13.1.2",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.2",
-    "vsce": "^1.69.0",
+    "typescript": "^3.7.4",
+    "vsce": "^1.71.0",
     "vscode": "^1.1.36"
   },
   "extensionDependencies": [
