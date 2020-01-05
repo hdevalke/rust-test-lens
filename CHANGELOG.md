@@ -1,6 +1,20 @@
 # Change Log
 
-All notable changes to the "rust-test-lens" extension will be documented in this file.
+## 0.3.0
+
+### Features
+
+* allow arguments for main and test binaries ([#12](https://github.com/hdevalke/rust-test-lens/issues/12))
+
+### 0.2.1
+
+#### Features
+
+* multi root workspaces
+
+#### Fixes
+
+* make test fn regex non greedy 4fec4cd
 
 ## 0.2.0
 
