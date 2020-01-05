@@ -8,7 +8,8 @@ import {
   debug,
   OutputChannel,
   workspace,
-  WorkspaceFolder
+  WorkspaceFolder,
+  Disposable
 } from "vscode";
 import { RustCodeLensProvider } from "./RustCodeLensProvider";
 import { RustTests } from "./RustTests";
@@ -36,27 +37,30 @@ export async function activate(context: ExtensionContext) {
       }
       if (metaMap.size !== 0) {
         const rustTests: RustTests = new RustTests(metaMap);
+        const main_args = config.get("args.main", []);
+        const test_args = config.get("args.tests", ["--nocapture"]);
         const codeLensProvider = new RustCodeLensProvider(
           onDidChange,
-          rustTests
+          rustTests,
+          main_args,
+          test_args
         );
+        const disposable = languages.registerCodeLensProvider(
+          { scheme: "file", language: "rust" },
+          codeLensProvider
+        );
+
         context.subscriptions.push(
-          languages.registerCodeLensProvider(
-            { scheme: "file", language: "rust" },
-            codeLensProvider
-          )
+          workspace.onDidChangeConfiguration(e => {
+            const config = workspace.getConfiguration("rust-test-lens");
+            const main_args: string[] = config.get("args.main", []);
+            const test_args = config.get("args.tests", ["--nocapture"]);
+            codeLensProvider.update_args(main_args, test_args);
+          })
         );
-        let disposable = commands.registerCommand(
-          "extension.debugTest",
-          debugConfig => {
-            const json = JSON.stringify(debugConfig, null, 2);
-            outputChannel.appendLine(`Debugging: ${json}`);
-            debug
-              .startDebugging(undefined, debugConfig)
-              .then(r => console.log("Result", r));
-          }
-        );
+
         context.subscriptions.push(disposable);
+        context.subscriptions.push(registerCmdDebugTest());
       }
     } else {
       outputChannel.append(
@@ -64,6 +68,16 @@ export async function activate(context: ExtensionContext) {
       );
     }
   }
+}
+
+function registerCmdDebugTest(): Disposable {
+  return commands.registerCommand("extension.debugTest", debugConfig => {
+    const json = JSON.stringify(debugConfig, null, 2);
+    outputChannel.appendLine(`Debugging: ${json}`);
+    debug
+      .startDebugging(undefined, debugConfig)
+      .then(r => console.log("Result", r));
+  });
 }
 
 // this method is called when your extension is deactivated

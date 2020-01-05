@@ -15,7 +15,9 @@ import { basename, dirname } from "path";
 export class RustCodeLensProvider implements CodeLensProvider {
   constructor(
     private _onDidChange: EventEmitter<void>,
-    private rustTests: RustTests
+    private rustTests: RustTests,
+    private main_args: string[],
+    private test_args: string[]
   ) {}
 
   get onDidChangeCodeLenses(): Event<void> {
@@ -33,6 +35,11 @@ export class RustCodeLensProvider implements CodeLensProvider {
     let lenses: CodeLens[] = this.testMethodLenses(doc);
     lenses.push(...this.mainMethodLenses(doc));
     return lenses;
+  }
+
+  public update_args(main_args: string[], test_args: string[]) {
+    this.main_args = main_args;
+    this.test_args = test_args;
   }
 
   private mainMethodLenses(doc: TextDocument): any {
@@ -90,10 +97,10 @@ export class RustCodeLensProvider implements CodeLensProvider {
   ): DebugConfiguration | undefined {
     const pkg = this.rustTests.getPackage(fn, doc.uri);
     if (pkg) {
-      const args =
-        fn === "main"
-          ? ["build", `--package=${pkg.name}`]
-          : ["test", "--no-run", `--package=${pkg.name}`];
+      const is_main = fn === "main";
+      const args = is_main
+        ? ["build", `--package=${pkg.name}`]
+        : ["test", "--no-run", `--package=${pkg.name}`];
 
       const bin = this.rustTests.getBin(doc.fileName, pkg);
       const filter = this.rustTests.getFilter(doc.fileName, pkg, bin);
@@ -106,7 +113,7 @@ export class RustCodeLensProvider implements CodeLensProvider {
       }
 
       args.push(`--manifest-path=${pkg.manifest_path}`);
-
+      const extra_args = is_main ? this.main_args : [fn, ...this.test_args];
       return {
         type: "lldb",
         request: "launch",
@@ -115,7 +122,7 @@ export class RustCodeLensProvider implements CodeLensProvider {
           args: args,
           filter: filter
         },
-        args: [fn],
+        args: extra_args,
         cwd: `${dirname(pkg.manifest_path)}`
       };
     }

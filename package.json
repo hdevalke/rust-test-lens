@@ -57,11 +57,23 @@
     ],
     "configuration": {
       "type": "object",
-      "title": "Rust Test Lens configuration",
+      "title": "Rust Test Lens",
       "properties": {
         "rust-test-lens.enabled": {
           "type": "boolean",
           "default": true,
+          "description": "Enable or disable this extension"
+        },
+        "rust-test-lens.args.main": {
+          "type": "array",
+          "default": [],
+          "description": "Enable or disable this extension"
+        },
+        "rust-test-lens.args.tests": {
+          "type": "array",
+          "default": [
+            "--nocapture"
+          ],
           "description": "Enable or disable this extension"
         }
       }
