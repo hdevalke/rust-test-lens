@@ -58,7 +58,7 @@ export class RustCodeLensProvider implements CodeLensProvider {
 
   private testMethodLenses(doc: TextDocument) {
     const text = doc.getText();
-    const reTest = /#\[test\]/g;
+    const reTest = /#\[(?:tokio::|async::)?test(?:\(.+?\))?\]/g;
     const reFnTest = /fn\s+(.+?)\s*\(\s*\)/g;
     let lenses: CodeLens[] = [];
     while (reTest.exec(text) !== null) {
