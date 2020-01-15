@@ -1,5 +1,11 @@
 # Change Log
 
+### 0.3.1
+
+#### Fixes
+
+* add test lens to async tests 1ee0155, closes #13
+
 ## 0.3.0
 
 ### Features
