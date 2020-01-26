@@ -1,6 +1,7 @@
 # Rust Test Lens
 
 [![Build Status](https://travis-ci.org/hdevalke/rust-test-lens.svg?branch=master)](https://travis-ci.org/hdevalke/rust-test-lens)
+[![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/hdevalke.rust-test-lens)](https://marketplace.visualstudio.com/items?itemName=hdevalke.rust-test-lens)
 
 A code lens to debug rust tests and binaries.
 
