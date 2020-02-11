@@ -86,8 +86,14 @@ export class RustTests {
       for (const t of pkg.targets) {
         let target_dir = dirname(t.src_path);
         if (uri.startsWith(target_dir)) {
-          target = t;
-          break;
+          const found = t.kind.find(e => e === "test");
+          if (
+            found === undefined ||
+            (found && basename(t.src_path) === basename(uri))
+          ) {
+            target = t;
+            break;
+          }
         }
       }
     }
