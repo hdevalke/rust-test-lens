@@ -1,5 +1,11 @@
 # Change Log
 
+### 0.3.2
+
+#### Fixes
+
+* Find correct target for integration tests 60d1f43, closes #15
+
 ### 0.3.1
 
 #### Fixes
