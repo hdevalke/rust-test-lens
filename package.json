@@ -2,7 +2,7 @@
   "name": "rust-test-lens",
   "displayName": "Rust Test Lens",
   "description": "Adds a code lens to quickly run or debug a single test for your Rust code.",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "publisher": "hdevalke",
   "engines": {
     "vscode": "^1.32.0"
@@ -39,11 +39,11 @@
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
-    "@types/node": "^13.1.4",
+    "@types/node": "^13.7.1",
     "prettier": "1.19.1",
     "tslint": "^5.20.1",
-    "typescript": "^3.7.4",
-    "vsce": "^1.71.0",
+    "typescript": "^3.7.5",
+    "vsce": "^1.73.0",
     "vscode": "^1.1.36"
   },
   "extensionDependencies": [
