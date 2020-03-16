@@ -7,6 +7,9 @@ A code lens to debug rust tests and binaries.
 
 ![test lens](images/test_codelens.png)
 
+⚠ NOTE: No more maintenance will be done to this extension.
+#17 has lead to adding the debug codelens into [rust-analyzer#3561](https://github.com/rust-analyzer/rust-analyzer/pull/3561). This code will remain available as is for those not using [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer).
+
 ## Requirements
 
 Depends on the LLDB extension [vscode-lldb](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb).

@@ -1,5 +1,9 @@
 # Change Log
 
+### 1.0.0
+
+* This extension goes in low maintenance mode in favor of [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=matklad.rust-analyzer), which provides the same functionality, when [vscode-lldb](https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) is available.
+
 ### 0.3.2
 
 #### Fixes
